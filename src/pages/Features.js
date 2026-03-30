@@ -3,17 +3,16 @@ import Layout from './Layout';
 import './Features.css';
 
 const Features = () => {
-  const [theme, setTheme] = useState('mystic'); // mystic, aurora, vulcan
+  const [theme, setTheme] = useState('mystic'); 
   const [intensity, setIntensity] = useState(50);
   const [btcPrice, setBtcPrice] = useState(null);
 
   const themes = {
-    mystic: { primary: '#8b5cf6', secondary: '#ec4899', bg: '#09090b' },
+    mystic: { primary: '#8b5cf6', secondary: '#ec4899', bg: '#05070a' },
     aurora: { primary: '#10b981', secondary: '#3b82f6', bg: '#020617' },
     vulcan: { primary: '#f43f5e', secondary: '#f59e0b', bg: '#0c0a09' }
   };
 
-  // 실시간 비트코인 가격 연동 (리액트의 데이터 패칭 시연)
   useEffect(() => {
     const fetchPrice = async () => {
       try {
@@ -25,7 +24,7 @@ const Features = () => {
       }
     };
     fetchPrice();
-    const interval = setInterval(fetchPrice, 10000); // 10초마다 갱신
+    const interval = setInterval(fetchPrice, 10000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -42,9 +41,9 @@ const Features = () => {
 
         <section className="premium-hero">
           <div className="reveal-text">
-            <span className="subtitle">EXPERIENCE THE POWER</span>
-            <h1>The Art of <span className="text-glow">React State</span></h1>
-            <p>단순한 코드 그 이상의 가치. 리액트의 상태 관리가 빚어내는 <br/>가장 매혹적이고 유연한 사용자 경험을 만나보세요.</p>
+            <span className="subtitle">TECHNOLOGY SHOWCASE</span>
+            <h1>Real-time <span className="text-glow">Engine</span></h1>
+            <p>리액트의 상태 관리가 빚어내는 가장 완벽하고 유연한 <br/>디지털 경험을 지금 바로 확인해 보세요.</p>
           </div>
 
           <div className="theme-switcher">
@@ -61,30 +60,31 @@ const Features = () => {
         </section>
 
         <div className="bento-grid">
-          {/* Real-time Data Card */}
+          {/* Bitcoin Live Widget */}
           <div className="bento-item small glass-panel">
             <div className="bento-content">
-              <h3>Live Market Data</h3>
+              <span className="badge-live">LIVE DATA</span>
+              <h3>BTC Market</h3>
               <div className="btc-value" style={{ color: 'var(--p-color)' }}>
                 {btcPrice ? `$${btcPrice.split('.')[0]}` : 'Loading...'}
               </div>
-              <p>Bitcoin 실시간 시세 (10s sync). 외부 API와 리액트 상태의 실시간 동기화.</p>
+              <p>실시간 암호화폐 API 연동 시연. (Sync every 10s)</p>
             </div>
           </div>
 
           <div className="bento-item large glass-panel">
             <div className="bento-content">
-              <h3>High-Velocity Rendering</h3>
-              <p>수백 개의 동적 노드를 초당 60프레임으로 제어하는 리액트의 압도적 효율성.</p>
+              <h3>Performance Rendering</h3>
+              <p>수백 개의 노드를 지연 없이 제어하는 Virtual DOM의 위력.</p>
               <div className="visual-preview">
                 <div className="wave-container">
-                  {[...Array(20)].map((_, i) => (
+                  {[...Array(24)].map((_, i) => (
                     <div 
                       key={i} 
                       className="wave-bar" 
                       style={{ 
-                        height: `${Math.sin(i * 0.5) * 50 + 60}%`,
-                        animationDelay: `${i * 0.1}s`,
+                        height: `${Math.sin(i * 0.4) * 60 + 70}%`,
+                        animationDelay: `${i * 0.05}s`,
                         backgroundColor: i % 2 === 0 ? 'var(--p-color)' : 'var(--s-color)'
                       }}
                     />
@@ -96,41 +96,28 @@ const Features = () => {
 
           <div className="bento-item small glass-panel">
             <div className="bento-content">
-              <h3>Dynamic Intensity</h3>
+              <h3>Dynamic UX</h3>
               <div className="slider-wrapper">
                 <input 
                   type="range" 
                   value={intensity} 
-                  onChange={(e) => setIntensity(e.target.value)} 
+                  onChange={(e) => setIntensity(Number(e.target.value))} 
                 />
                 <div className="intensity-value" style={{ color: 'var(--p-color)' }}>{intensity}%</div>
               </div>
-              <p>상태 변화에 따른 즉각적인 UI 피드백 루프.</p>
-            </div>
-          </div>
-
-          <div className="bento-item small glass-panel">
-            <div className="bento-content">
-              <div className="comp-icons">
-                <div className="icon-box" style={{ borderColor: 'var(--p-color)' }}>🧩</div>
-                <div className="icon-box" style={{ borderColor: 'var(--s-color)' }}>✨</div>
-              </div>
-              <h3>Component Magic</h3>
-              <p>독립적인 조각들이 모여 완성되는 유기적인 인터페이스.</p>
+              <p>슬라이더 조절 시 즉각적으로 반영되는 UI 피드백.</p>
             </div>
           </div>
 
           <div className="bento-item wide glass-panel">
             <div className="bento-content split">
               <div className="text-side">
-                <h3>Declarative Purity</h3>
-                <p>복잡한 명령 대신 결과에 집중합니다. 이것이 리액트가 현대 웹의 표준이 된 이유입니다.</p>
+                <h3>Component Logic</h3>
+                <p>독립적인 모듈들이 모여 거대한 시스템을 이루는 선언적 프로그래밍.</p>
               </div>
               <div className="code-preview-modern">
                 <div className="code-dot"></div>
-                <pre>
-                  <code>{`view = state => (\n  <div theme={theme}>\n    {state.data}\n  </div>\n)`}</code>
-                </pre>
+                <pre><code>{`const App = () => (\n  <Showcase data={realtime} />\n)`}</code></pre>
               </div>
             </div>
           </div>
@@ -138,7 +125,7 @@ const Features = () => {
 
         <footer className="premium-footer">
           <div className="footer-line"></div>
-          <p>© 2026 REACT POWERED SHOWCASE. CRAFTED WITH PASSION.</p>
+          <p>© 2026 REACT POWERED SHOWCASE. ALL RIGHTS RESERVED.</p>
         </footer>
       </div>
     </Layout>
