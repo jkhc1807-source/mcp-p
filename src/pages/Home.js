@@ -8,10 +8,10 @@ function Home() {
     <Layout>
       <div className="hero-card">
         <h1>Welcome to <br/><span style={{color: 'var(--primary)'}}>The Future</span></h1>
-        <p>최신 리액트 기술로 구축된 모던한 웹사이트입니다.<br/>반응형 디자인과 세련된 UI를 경험해 보세요.</p>
+        <p>리액트의 강력한 상태 관리와 고성능 렌더링을 직접 확인해 보세요.<br/>단순한 페이지를 넘어선 인터랙티브한 경험을 선사합니다.</p>
         <div className="cta-group">
-          <Link to="/about" className="btn btn-primary">Get Started</Link>
-          <Link to="/contact" className="btn btn-outline">Contact Us</Link>
+          <Link to="/features" className="btn btn-primary">Showcase 보기</Link>
+          <Link to="/about" className="btn btn-outline">더 알아보기</Link>
         </div>
       </div>
     </Layout>

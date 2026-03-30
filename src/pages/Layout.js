@@ -15,6 +15,7 @@ const Layout = ({ children }) => {
           
           <div className="nav-links desktop-only">
             <NavLink to="/" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Home</NavLink>
+            <NavLink to="/features" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Showcase</NavLink>
             <NavLink to="/about" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>About</NavLink>
             <NavLink to="/contact" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Contact</NavLink>
           </div>
@@ -36,6 +37,7 @@ const Layout = ({ children }) => {
       <div className={`mobile-overlay ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
         <div className="mobile-nav-links" onClick={(e) => e.stopPropagation()}>
           <NavLink to="/" className="mobile-nav-item" onClick={toggleMenu}>Home</NavLink>
+          <NavLink to="/features" className="mobile-nav-item" onClick={toggleMenu}>Showcase</NavLink>
           <NavLink to="/about" className="mobile-nav-item" onClick={toggleMenu}>About</NavLink>
           <NavLink to="/contact" className="mobile-nav-item" onClick={toggleMenu}>Contact</NavLink>
         </div>
