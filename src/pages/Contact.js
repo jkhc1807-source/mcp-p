@@ -84,38 +84,53 @@ const Contact = () => {
           <form className="contact-form glass-panel" onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Name</label>
-              <input 
-                type="text" 
-                placeholder="홍길동" 
-                value={formData.name} 
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                required
-              />
+              <div className="input-wrapper">
+                <input 
+                  type="text" 
+                  placeholder="홍길동" 
+                  value={formData.name} 
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  required
+                />
+                {formData.name && (
+                  <button type="button" className="btn-clear" onClick={() => setFormData({...formData, name: ''})}>✕</button>
+                )}
+              </div>
             </div>
             
             <div className="form-group">
               <label>Email Address</label>
               <div className="email-split-container">
-                <input 
-                  type="text" 
-                  placeholder="ID" 
-                  value={formData.emailId}
-                  onChange={(e) => setFormData({...formData, emailId: e.target.value})}
-                  required
-                />
+                <div className="input-wrapper">
+                  <input 
+                    type="text" 
+                    placeholder="ID" 
+                    value={formData.emailId}
+                    onChange={(e) => setFormData({...formData, emailId: e.target.value})}
+                    required
+                  />
+                  {formData.emailId && (
+                    <button type="button" className="btn-clear" onClick={() => setFormData({...formData, emailId: ''})}>✕</button>
+                  )}
+                </div>
                 <span className="at-symbol">@</span>
                 
                 <div className="custom-dropdown-wrapper" ref={dropdownRef}>
                   {isManual ? (
                     <div className="manual-input-wrapper">
-                      <input 
-                        type="text" 
-                        placeholder="domain.com" 
-                        value={formData.emailDomain}
-                        onChange={(e) => setFormData({...formData, emailDomain: e.target.value})}
-                        autoFocus
-                        required
-                      />
+                      <div className="input-wrapper">
+                        <input 
+                          type="text" 
+                          placeholder="domain.com" 
+                          value={formData.emailDomain}
+                          onChange={(e) => setFormData({...formData, emailDomain: e.target.value})}
+                          autoFocus
+                          required
+                        />
+                        {formData.emailDomain && (
+                          <button type="button" className="btn-clear" onClick={() => setFormData({...formData, emailDomain: ''})}>✕</button>
+                        )}
+                      </div>
                       <button type="button" className="btn-back" onClick={() => setIsManual(false)}>↩</button>
                     </div>
                   ) : (
@@ -147,13 +162,18 @@ const Contact = () => {
 
             <div className="form-group">
               <label>Message</label>
-              <textarea 
-                placeholder="전달하고 싶은 메시지..."
-                rows="5"
-                value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
-                required
-              ></textarea>
+              <div className="input-wrapper">
+                <textarea 
+                  placeholder="전달하고 싶은 메시지..."
+                  rows="5"
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  required
+                ></textarea>
+                {formData.message && (
+                  <button type="button" className="btn-clear" style={{top: '1.5rem', transform: 'none'}} onClick={() => setFormData({...formData, message: ''})}>✕</button>
+                )}
+              </div>
             </div>
             <button className={`btn-submit ${status}`} disabled={status !== 'idle'}>
               {status === 'idle' && 'Send Message'}
