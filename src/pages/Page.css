@@ -1,540 +1,167 @@
 :root {
-  --bg-color: #f0f4f8; /* 더 차분하고 맑은 파스텔 블루-그레이 */
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --primary: #fb7185; 
-  --secondary: #818cf8;
-  --text-main: #0f172a;
-  --text-dim: #475569;
-  --border: rgba(255, 255, 255, 0.5);
-  --input-bg: #ffffff;
-  --glass: blur(20px) saturate(160%);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 10px 30px rgba(148, 163, 184, 0.15);
-  --nav-height: 80px;
+  --primary: #3b82f6;
+  --secondary: #ec4899;
+  --bg-dark: #09090b;
+  --text-muted: #71717a;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  text-decoration: none !important; /* [확실] 모든 요소의 밑줄 강제 제거 */
-}
-
-a, button {
-  text-decoration: none !important;
-  color: inherit;
-}
-
-body {
-  background-color: var(--bg-color);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(251, 113, 133, 0.12) 0, transparent 50%), 
-    radial-gradient(at 100% 0%, rgba(129, 140, 248, 0.1) 0, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(56, 189, 248, 0.1) 0, transparent 50%);
-  color: var(--text-main);
-  font-family: 'Pretendard', -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
+.premium-page-container {
+  padding: 8rem 2rem;
+  background-color: var(--bg-dark);
+  color: white;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
-/* [확실] 텍스트 에어리어 리사이즈로 인한 레이아웃 시프트 방지 */
-textarea {
-  resize: none !important; 
-}
-
-/* Navbar: 화면 끝까지 가도록 구조 변경 */
-.navbar-wrapper {
-  width: 100%;
-  height: var(--nav-height);
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2001; /* 오버레이(1500)보다 높게 설정하여 닫기 버튼이 항상 보임 */
-  display: flex;
-  justify-content: center;
-}
-
-.navbar {
-  width: 100%;
-  max-width: 1200px;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-}
-
-.nav-logo {
-  font-size: 1.5rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-decoration: none;
-  letter-spacing: -1px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 3rem;
-}
-
-.nav-item {
-  color: var(--text-dim);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s;
-}
-
-.nav-item:hover, .nav-item.active {
-  color: var(--primary);
-}
-
-.main-content {
-  padding-top: calc(var(--nav-height) + 4rem); /* 헤더 높이만큼 띄움 */
-  padding-bottom: 4rem;
-  display: flex;
-  justify-content: center;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-/* Hero Card */
-.hero-card {
-  background: var(--card-bg);
-  backdrop-filter: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 48px;
-  padding: 5rem 4rem;
-  max-width: 800px;
-  width: 100%;
+/* Common Hero Styles */
+.about-hero, .contact-hero {
   text-align: center;
-  box-shadow: var(--shadow-md);
+  max-width: 800px;
+  margin: 0 auto 6rem;
+  animation: slideUp 0.8s ease-out;
 }
 
-h1 {
-  font-size: 3.5rem;
-  font-weight: 900;
-  letter-spacing: -2px;
-  line-height: 1.2;
+.subtitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+  color: var(--primary);
+  display: block;
   margin-bottom: 1.5rem;
 }
 
-.hero-card p {
-  color: var(--text-dim);
-  font-size: 1.2rem;
-  margin-bottom: 3.5rem;
-  font-weight: 500;
+.text-gradient {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* CTA Container & Buttons */
-.cta-container {
+/* About Page Specific */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 6rem;
+}
+
+.value-card {
+  padding: 3rem 2.5rem;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.value-card:hover { transform: translateY(-10px); }
+
+.value-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-vision {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vision-content {
+  padding: 4rem;
+  text-align: center;
+}
+
+.vision-stats {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.cta-group {
-  display: flex;
-  gap: 1.5rem; /* 버튼 간격 고정 */
   justify-content: center;
-  align-items: center;
-  width: 100%;
+  gap: 4rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
 }
 
-.btn {
-  height: 56px; /* 버튼 높이 통일 */
-  padding: 0 2.5rem;
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none; /* 밑줄 제거 */
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #fda4af, #a5b4fc);
-  color: white;
-  box-shadow: 0 8px 20px rgba(251, 113, 133, 0.2);
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(251, 113, 133, 0.3);
-}
-
-.btn-outline {
-  background: white;
-  border: 1px solid #e2e8f0;
-  color: var(--text-dim);
-}
-
-.btn-outline:hover {
-  border-color: var(--primary);
+.stat-item strong {
+  display: block;
+  font-size: 2.5rem;
   color: var(--primary);
-  background: #fff1f2;
 }
 
-/* Form Layout */
-.contact-form-wrapper {
-  width: 100%;
-  max-width: 550px;
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+/* Contact Page Specific */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.contact-form-wrapper.visible {
-  height: auto;
-  opacity: 1;
-  margin-top: 3.5rem;
-  overflow: visible; /* 드롭다운이 잘리지 않게 */
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; }
 }
+
+.contact-info {
+  padding: 3rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.info-item .icon { font-size: 1.5rem; }
 
 .contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  text-align: left;
+  padding: 3rem;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  margin-bottom: 2rem;
 }
 
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
 }
 
 .form-group input, .form-group textarea {
   width: 100%;
-  background: var(--input-bg);
-  border: 1.5px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 1rem 1.25rem;
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.2s;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  transition: border-color 0.3s;
 }
 
 .form-group input:focus, .form-group textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.1);
 }
 
-/* Email Split Selector: 정교한 비율 조정 */
-.email-split-container {
-  display: flex;
-  align-items: stretch;
-  background: var(--input-bg);
-  border: 1.5px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 4px;
-  transition: all 0.2s;
-}
-
-.email-split-container:focus-within {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.1);
-}
-
-.user-part {
-  flex: 3; /* 아이디 비율 */
-}
-
-.user-part input {
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  height: 48px;
-}
-
-.at-symbol {
-  display: flex;
-  align-items: center;
-  color: #94a3b8;
+.btn-submit {
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: none;
+  background: var(--primary);
+  color: white;
   font-weight: 700;
-  padding: 0 0.5rem;
-  user-select: none;
-}
-
-.domain-selector-wrapper {
-  flex: 2; /* 도메인 선택창 비율 고정 */
-  position: relative;
-}
-
-.domain-select-btn {
-  width: 100%;
-  height: 100%;
-  min-height: 48px;
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
-  border-radius: 16px;
-  padding: 0 1rem;
-  color: var(--text-dim);
-  font-weight: 600;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   cursor: pointer;
-  transition: all 0.2s;
-}
-
-.domain-select-btn:hover {
-  background: #f1f5f9;
-}
-
-/* 드롭다운: 레이아웃을 밀지 않도록 Absolute 처리 */
-.domain-dropdown-container {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 100%;
-  min-width: 200px;
-  z-index: 2000;
-}
-
-.domain-dropdown {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem;
-  list-style: none;
-  margin: 0;
-}
-
-.domain-dropdown li {
-  padding: 0.75rem 1rem;
-  border-radius: 14px;
-  color: var(--text-dim);
-  font-weight: 600;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.domain-dropdown li:hover {
-  background: #fff1f2;
-  color: var(--primary);
-}
-
-.domain-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #e2e8f0;
-}
-
-.domain-dropdown li:hover .domain-dot {
-  background: var(--primary);
-}
-
-/* Clear Button (X) 스타일 통일 */
-.clear-btn {
-  position: absolute;
-  right: 12px;
-  width: 24px;
-  height: 24px;
-  background: #f1f5f9;
-  border: none;
-  border-radius: 50%;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 1.1rem;
-  transition: all 0.2s;
-  line-height: 1;
-}
-
-/* [확실] 텍스트 에어리어 내부 X 버튼 위치 조정 */
-.form-group textarea + .clear-btn {
-  top: 12px;
-  transform: none;
-}
-
-.clear-btn:hover {
-  background: #e2e8f0;
-  color: var(--text-main);
-}
-
-/* [확실] 성공 메시지 UI 스타일 */
-.success-message-ui {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 2rem 0;
-  animation: successPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes successPop {
-  0% { opacity: 0; transform: scale(0.9) translateY(20px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.success-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 10px 20px rgba(251, 113, 133, 0.2));
-}
-
-.success-message-ui h2 {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--text-main);
-  letter-spacing: -1.5px;
-}
-
-.success-message-ui p {
-  color: var(--text-dim);
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-/* Mobile Nav Styles */
-.mobile-menu-btn {
-  display: none;
-  flex-direction: column;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 2000;
-  padding: 10px;
-}
-
-.mobile-menu-btn span {
-  display: block;
-  width: 28px;
-  height: 3px;
-  background: var(--text-main);
-  border-radius: 4px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.mobile-menu-btn.open span:nth-child(1) {
-  transform: translateY(9px) rotate(45deg);
-  background: var(--primary);
-}
-
-.mobile-menu-btn.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.mobile-menu-btn.open span:nth-child(3) {
-  transform: translateY(-9px) rotate(-45deg);
-  background: var(--primary);
-}
-
-.mobile-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  z-index: 1500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.4s ease;
-}
-
-.mobile-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.mobile-nav-links {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-  text-align: center;
-}
-
-.mobile-nav-item {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--text-main);
-  text-decoration: none;
   transition: all 0.3s;
-  letter-spacing: -2px;
 }
 
-.mobile-nav-item:hover {
-  color: var(--primary);
-  transform: scale(1.1);
+.btn-submit.sending { opacity: 0.7; cursor: not-allowed; }
+.btn-submit.success { background: #10b981; }
+
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
 }
 
-@media (max-width: 768px) {
-  .navbar { padding: 0 1.5rem; }
-  .desktop-only { display: none !important; }
-  .mobile-menu-btn { display: flex; }
-  
-  .hero-card { 
-    padding: 4rem 1.5rem; 
-    border-radius: 32px; 
-    width: 95%;
-  }
-  
-  h1 { font-size: 2.2rem; }
-  
-  .cta-group { 
-    flex-direction: column; 
-    width: 100%;
-    gap: 1rem;
-  }
-  
-  .btn { width: 100%; }
-  
-  .email-split-container { 
-    flex-direction: column; 
-    gap: 0.5rem; 
-    padding: 10px;
-    background: transparent;
-    border: none;
-  }
-
-  .user-part, .domain-selector-wrapper {
-    width: 100%;
-    background: white;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 20px;
-  }
-
-  .at-symbol { display: none; }
-  
-  .domain-select-btn {
-    border: none;
-    border-radius: 20px;
-    height: 56px;
-  }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-

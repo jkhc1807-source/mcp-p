@@ -200,6 +200,14 @@
   margin-top: 1rem;
 }
 
+.btc-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 1rem 0;
+  letter-spacing: -0.05em;
+  text-shadow: 0 0 20px rgba(var(--p-color-rgb), 0.3);
+}
+
 .comp-icons {
   display: flex;
   gap: 1rem;

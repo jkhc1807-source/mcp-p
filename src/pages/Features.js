@@ -1,16 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import './Features.css';
 
 const Features = () => {
   const [theme, setTheme] = useState('mystic'); // mystic, aurora, vulcan
   const [intensity, setIntensity] = useState(50);
+  const [btcPrice, setBtcPrice] = useState(null);
 
   const themes = {
     mystic: { primary: '#8b5cf6', secondary: '#ec4899', bg: '#09090b' },
     aurora: { primary: '#10b981', secondary: '#3b82f6', bg: '#020617' },
     vulcan: { primary: '#f43f5e', secondary: '#f59e0b', bg: '#0c0a09' }
   };
+
+  // 실시간 비트코인 가격 연동 (리액트의 데이터 패칭 시연)
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const response = await fetch('https://api.coindesk.com/v1/bpi/currentprice.json');
+        const data = await response.json();
+        setBtcPrice(data.bpi.USD.rate);
+      } catch (error) {
+        console.error('Failed to fetch price');
+      }
+    };
+    fetchPrice();
+    const interval = setInterval(fetchPrice, 10000); // 10초마다 갱신
+    return () => clearInterval(interval);
+  }, []);
 
   const currentTheme = themes[theme];
 
@@ -21,7 +38,6 @@ const Features = () => {
         '--s-color': currentTheme.secondary,
         '--bg-color': currentTheme.bg
       }}>
-        {/* Animated Background Mesh */}
         <div className="mesh-gradient"></div>
 
         <section className="premium-hero">
@@ -44,9 +60,18 @@ const Features = () => {
           </div>
         </section>
 
-        {/* Bento Grid Showcase */}
         <div className="bento-grid">
-          {/* Main Feature: Performance Visualizer */}
+          {/* Real-time Data Card */}
+          <div className="bento-item small glass-panel">
+            <div className="bento-content">
+              <h3>Live Market Data</h3>
+              <div className="btc-value" style={{ color: 'var(--p-color)' }}>
+                {btcPrice ? `$${btcPrice.split('.')[0]}` : 'Loading...'}
+              </div>
+              <p>Bitcoin 실시간 시세 (10s sync). 외부 API와 리액트 상태의 실시간 동기화.</p>
+            </div>
+          </div>
+
           <div className="bento-item large glass-panel">
             <div className="bento-content">
               <h3>High-Velocity Rendering</h3>
@@ -69,7 +94,6 @@ const Features = () => {
             </div>
           </div>
 
-          {/* Sub Feature 1: Interaction */}
           <div className="bento-item small glass-panel">
             <div className="bento-content">
               <h3>Dynamic Intensity</h3>
@@ -85,7 +109,6 @@ const Features = () => {
             </div>
           </div>
 
-          {/* Sub Feature 2: Composition */}
           <div className="bento-item small glass-panel">
             <div className="bento-content">
               <div className="comp-icons">
@@ -97,7 +120,6 @@ const Features = () => {
             </div>
           </div>
 
-          {/* Wide Feature: Logic Comparison */}
           <div className="bento-item wide glass-panel">
             <div className="bento-content split">
               <div className="text-side">
