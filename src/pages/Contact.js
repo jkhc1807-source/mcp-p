@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Layout from './Layout';
 import './Page.css';
 
@@ -10,12 +10,31 @@ const Contact = () => {
     message: '' 
   });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isManual, setIsManual] = useState(false);
   const [status, setStatus] = useState('idle');
+  const dropdownRef = useRef(null);
 
-  const domains = ['naver.com', 'gmail.com', 'daum.net', 'kakao.com', '직접 입력'];
+  const domains = ['gmail.com', 'naver.com', 'daum.net', 'kakao.com', '직접 입력'];
+
+  // 외부 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleDomainSelect = (domain) => {
-    setFormData({ ...formData, emailDomain: domain === '직접 입력' ? '' : domain });
+    if (domain === '직접 입력') {
+      setIsManual(true);
+      setFormData({ ...formData, emailDomain: '' });
+    } else {
+      setIsManual(false);
+      setFormData({ ...formData, emailDomain: domain });
+    }
     setIsDropdownOpen(false);
   };
 
@@ -26,6 +45,7 @@ const Contact = () => {
       setStatus('success');
       setTimeout(() => setStatus('idle'), 3000);
       setFormData({ name: '', emailId: '', emailDomain: '', message: '' });
+      setIsManual(false);
     }, 2000);
   };
 
@@ -85,18 +105,31 @@ const Contact = () => {
                 />
                 <span className="at-symbol">@</span>
                 
-                {/* Custom Premium Dropdown (스크립트 기반) */}
-                <div className="custom-dropdown-wrapper">
-                  <div 
-                    className={`custom-dropdown-selected ${isDropdownOpen ? 'open' : ''}`}
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  >
-                    {formData.emailDomain || 'domain.com'}
-                    <span className="dropdown-arrow"></span>
-                  </div>
+                <div className="custom-dropdown-wrapper" ref={dropdownRef}>
+                  {isManual ? (
+                    <div className="manual-input-wrapper">
+                      <input 
+                        type="text" 
+                        placeholder="domain.com" 
+                        value={formData.emailDomain}
+                        onChange={(e) => setFormData({...formData, emailDomain: e.target.value})}
+                        autoFocus
+                        required
+                      />
+                      <button type="button" className="btn-back" onClick={() => setIsManual(false)}>↩</button>
+                    </div>
+                  ) : (
+                    <div 
+                      className={`custom-dropdown-selected ${isDropdownOpen ? 'open' : ''}`}
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    >
+                      {formData.emailDomain || '선택하세요'}
+                      <span className="dropdown-arrow"></span>
+                    </div>
+                  )}
                   
-                  {isDropdownOpen && (
-                    <div className="custom-dropdown-list glass-panel">
+                  {isDropdownOpen && !isManual && (
+                    <div className="custom-dropdown-list glass-panel opaque">
                       {domains.map((domain, index) => (
                         <div 
                           key={index} 
