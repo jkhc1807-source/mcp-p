@@ -21,7 +21,7 @@ body {
   line-height: 1.6;
 }
 
-/* --- Navigation (Restored & Enhanced) --- */
+/* --- Navigation --- */
 .navbar-wrapper {
   position: fixed;
   top: 0;
@@ -66,7 +66,6 @@ body {
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all 0.3s;
 }
 
 .nav-item:hover, .nav-item.active {
@@ -74,7 +73,7 @@ body {
   text-shadow: 0 0 15px rgba(var(--p-rgb), 0.5);
 }
 
-/* --- Containers --- */
+/* --- Global Containers --- */
 .premium-page-container {
   padding: 12rem 2rem 6rem;
   min-height: 100vh;
@@ -117,6 +116,27 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
+/* --- Home Specific --- */
+.hero-card {
+  text-align: center;
+  margin-bottom: 6rem;
+  animation: slideUp 0.8s ease-out;
+}
+
+.hero-card p {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-group {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 4rem; /* 버튼과 문구 사이 간격 확실히 추가 */
+}
+
 /* --- Buttons --- */
 .btn {
   padding: 1.2rem 2.8rem;
@@ -125,6 +145,8 @@ h1 {
   text-decoration: none;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: inline-block;
+  cursor: pointer;
+  border: none;
 }
 
 .btn-primary {
@@ -144,45 +166,101 @@ h1 {
   box-shadow: 0 15px 40px rgba(var(--p-rgb), 0.5);
 }
 
-/* --- About Page --- */
+/* --- About Page (Vision Section Restored) --- */
+.about-hero { text-align: center; margin-bottom: 8rem; }
+
 .values-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  margin: 6rem 0;
+  margin-bottom: 8rem;
 }
 
-.value-card {
+.value-card { text-align: center; padding: 4rem 2rem; }
+.value-icon { font-size: 4rem; margin-bottom: 2rem; }
+
+.about-vision {
+  width: 100%;
+  margin-top: 4rem;
+}
+
+.vision-content {
   text-align: center;
+  padding: 5rem 2rem;
 }
 
-.value-icon { font-size: 3.5rem; margin-bottom: 1.5rem; }
+.vision-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
 
-/* --- Contact Page (Restored Layout) --- */
+.vision-content p {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--text-muted);
+  max-width: 800px;
+  margin: 0 auto 4rem;
+}
+
+.vision-stats {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-item strong {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.stat-item span {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* --- Contact Page (Grid Layout Reinforced) --- */
+.contact-hero { text-align: center; margin-bottom: 6rem; }
+
 .contact-grid {
   display: grid;
-  grid-template-columns: 1fr 1.6fr;
-  gap: 3rem;
+  grid-template-columns: 1fr 1.6fr; /* 확실한 2단 분리 */
+  gap: 4rem;
   align-items: start;
 }
+
+.contact-info h3 { font-size: 2rem; margin-bottom: 2rem; }
 
 .info-item {
   display: flex;
   gap: 1.5rem;
-  margin: 2.5rem 0;
+  margin-bottom: 3rem;
 }
 
-.info-item .icon { font-size: 2rem; color: var(--primary); }
+.info-item .icon { font-size: 2.5rem; color: var(--primary); }
 
-.contact-form .form-group {
-  margin-bottom: 2rem;
+.contact-form {
+  padding: 4rem;
 }
 
-.contact-form label {
+.form-group { margin-bottom: 2rem; }
+
+.form-group label {
   display: block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-bottom: 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
   color: var(--text-muted);
   text-transform: uppercase;
 }
@@ -191,44 +269,32 @@ h1 {
   width: 100%;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 1.2rem;
+  border-radius: 20px;
+  padding: 1.5rem;
   color: white;
-  font-family: inherit;
-  transition: border-color 0.3s;
-}
-
-.contact-form input:focus {
-  border-color: var(--primary);
-  outline: none;
+  font-size: 1rem;
 }
 
 .btn-submit {
   width: 100%;
-  padding: 1.2rem;
+  padding: 1.5rem;
+  border-radius: 20px;
   background: var(--primary);
-  border: none;
-  border-radius: 16px;
   color: white;
-  font-weight: 800;
+  font-weight: 900;
+  font-size: 1.1rem;
   cursor: pointer;
+  border: none;
+  transition: all 0.3s;
 }
 
 /* --- Animations --- */
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
+  from { opacity: 0; transform: translateY(50px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.hero-card, .about-hero, .contact-hero {
-  text-align: center;
-  margin-bottom: 6rem;
-  animation: slideUp 0.8s ease-out;
-}
-
-/* Mobile Fixes */
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .contact-grid { grid-template-columns: 1fr; }
-  .navbar-wrapper { padding: 1rem; }
-  .nav-links { display: none; } /* Simplified mobile for now */
+  .vision-stats { gap: 3rem; }
 }
