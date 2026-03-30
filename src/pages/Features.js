@@ -40,8 +40,7 @@ const Features = () => {
     <Layout>
       <div className={`premium-container theme-${theme}`} style={{
         '--p-color': currentTheme.primary,
-        '--s-color': currentTheme.secondary,
-        '--bg-color': currentTheme.bg
+        '--s-color': currentTheme.secondary
       }}>
         <div className="mesh-gradient"></div>
 

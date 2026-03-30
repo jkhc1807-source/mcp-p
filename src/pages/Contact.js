@@ -144,10 +144,10 @@ const Contact = () => {
                   )}
                   
                   {isDropdownOpen && !isManual && (
-                    <div className="custom-dropdown-list glass-panel opaque">
-                      {domains.map((domain, index) => (
+                    <div className="custom-dropdown-list">
+                      {domains.map((domain) => (
                         <div 
-                          key={index} 
+                          key={domain} 
                           className="custom-dropdown-item"
                           onClick={() => handleDomainSelect(domain)}
                         >

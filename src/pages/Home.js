@@ -25,7 +25,7 @@ function Home() {
         <div 
           className="spotlight" 
           style={{ 
-            transform: `translate(${mousePos.x - 300}px, ${mousePos.y - 300}px)` 
+            transform: `translate(${mousePos.x - 450}px, ${mousePos.y - 450}px)` 
           }}
         ></div>
 
