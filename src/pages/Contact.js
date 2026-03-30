@@ -9,10 +9,14 @@ const Contact = () => {
     emailDomain: '', 
     message: '' 
   });
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [status, setStatus] = useState('idle');
 
-  const handleDomainChange = (e) => {
-    setFormData({ ...formData, emailDomain: e.target.value });
+  const domains = ['naver.com', 'gmail.com', 'daum.net', 'kakao.com', '직접 입력'];
+
+  const handleDomainSelect = (domain) => {
+    setFormData({ ...formData, emailDomain: domain === '직접 입력' ? '' : domain });
+    setIsDropdownOpen(false);
   };
 
   const handleSubmit = (e) => {
@@ -69,7 +73,6 @@ const Contact = () => {
               />
             </div>
             
-            {/* 이메일 분리 입력창 (수정됨) */}
             <div className="form-group">
               <label>Email Address</label>
               <div className="email-split-container">
@@ -81,20 +84,31 @@ const Contact = () => {
                   required
                 />
                 <span className="at-symbol">@</span>
-                <input 
-                  type="text" 
-                  placeholder="domain.com" 
-                  value={formData.emailDomain}
-                  onChange={(e) => setFormData({...formData, emailDomain: e.target.value})}
-                  required
-                />
-                <select className="domain-select" onChange={handleDomainChange} value={formData.emailDomain}>
-                  <option value="">직접 입력</option>
-                  <option value="naver.com">naver.com</option>
-                  <option value="gmail.com">gmail.com</option>
-                  <option value="daum.net">daum.net</option>
-                  <option value="kakao.com">kakao.com</option>
-                </select>
+                
+                {/* Custom Premium Dropdown (스크립트 기반) */}
+                <div className="custom-dropdown-wrapper">
+                  <div 
+                    className={`custom-dropdown-selected ${isDropdownOpen ? 'open' : ''}`}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    {formData.emailDomain || 'domain.com'}
+                    <span className="dropdown-arrow"></span>
+                  </div>
+                  
+                  {isDropdownOpen && (
+                    <div className="custom-dropdown-list glass-panel">
+                      {domains.map((domain, index) => (
+                        <div 
+                          key={index} 
+                          className="custom-dropdown-item"
+                          onClick={() => handleDomainSelect(domain)}
+                        >
+                          {domain}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
