@@ -97,12 +97,14 @@ body {
   text-decoration: none;
   transition: all 0.3s;
   display: inline-block;
+  cursor: pointer;
+  border: none;
 }
 
 .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 30px rgba(var(--p-rgb), 0.3); }
 .btn-outline { border: 1px solid var(--glass-border); color: white; background: var(--glass); }
 
-/* --- About Vision (Fixed Design) --- */
+/* --- About Vision --- */
 .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 6rem 0; }
 .value-card { text-align: center; }
 .value-icon { font-size: 4rem; margin-bottom: 2rem; }
@@ -116,7 +118,7 @@ body {
 .stat-item strong { display: block; font-size: 4rem; font-weight: 900; color: var(--primary); }
 .stat-item span { font-size: 0.9rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-top: 1rem; }
 
-/* --- Contact Page (Fixed Grid & Email Split) --- */
+/* --- Contact Page (Custom Select Added) --- */
 .contact-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 4rem; }
 .info-item { display: flex; gap: 2rem; margin-bottom: 3rem; }
 .info-item .icon { font-size: 2.5rem; color: var(--primary); }
@@ -124,13 +126,59 @@ body {
 .email-split-container { display: flex; align-items: center; gap: 0.8rem; }
 .email-split-container input { flex: 1; }
 .at-symbol { font-weight: 900; color: var(--text-muted); }
-.domain-select { flex: 0.8; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.2rem; color: white; }
+
+/* Premium Select Styling */
+.domain-select {
+  flex: 0.8;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.2rem 2.5rem 1.2rem 1.2rem; /* 공간 확보 */
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  appearance: none; /* 기본 화살표 제거 */
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  transition: all 0.3s;
+}
+
+.domain-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(var(--p-rgb), 0.2);
+  outline: none;
+}
+
+/* option 요소 배경색 강제 (일부 브라우저) */
+.domain-select option {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 10px;
+}
 
 .form-group { margin-bottom: 2.5rem; }
 .form-group label { display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-muted); }
-.contact-form input, .contact-form textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.2rem; color: white; }
+.contact-form input, .contact-form textarea { 
+  width: 100%; 
+  background: rgba(255,255,255,0.05); 
+  border: 1px solid var(--glass-border); 
+  border-radius: 16px; 
+  padding: 1.2rem; 
+  color: white;
+  font-family: inherit;
+  transition: all 0.3s;
+}
 
-.btn-submit { width: 100%; padding: 1.5rem; border-radius: 16px; background: var(--primary); color: white; font-weight: 900; font-size: 1.1rem; border: none; cursor: pointer; }
+.contact-form input:focus, .contact-form textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  background: rgba(255,255,255,0.08);
+}
+
+.btn-submit { width: 100%; padding: 1.5rem; border-radius: 16px; background: var(--primary); color: white; font-weight: 900; font-size: 1.1rem; border: none; cursor: pointer; transition: all 0.3s; }
+.btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(var(--p-rgb), 0.4); }
 
 /* --- Showcase Text Fix --- */
 .text-gradient { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
