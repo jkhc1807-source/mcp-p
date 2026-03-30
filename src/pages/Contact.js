@@ -3,17 +3,25 @@ import Layout from './Layout';
 import './Page.css';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // idle, sending, success
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    emailId: '', 
+    emailDomain: '', 
+    message: '' 
+  });
+  const [status, setStatus] = useState('idle');
+
+  const handleDomainChange = (e) => {
+    setFormData({ ...formData, emailDomain: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus('sending');
-    // 실제 서버 전송 시뮬레이션
     setTimeout(() => {
       setStatus('success');
       setTimeout(() => setStatus('idle'), 3000);
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', emailId: '', emailDomain: '', message: '' });
     }, 2000);
   };
 
@@ -60,16 +68,36 @@ const Contact = () => {
                 required
               />
             </div>
+            
+            {/* 이메일 분리 입력창 (수정됨) */}
             <div className="form-group">
               <label>Email Address</label>
-              <input 
-                type="email" 
-                placeholder="your@email.com" 
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                required
-              />
+              <div className="email-split-container">
+                <input 
+                  type="text" 
+                  placeholder="ID" 
+                  value={formData.emailId}
+                  onChange={(e) => setFormData({...formData, emailId: e.target.value})}
+                  required
+                />
+                <span className="at-symbol">@</span>
+                <input 
+                  type="text" 
+                  placeholder="domain.com" 
+                  value={formData.emailDomain}
+                  onChange={(e) => setFormData({...formData, emailDomain: e.target.value})}
+                  required
+                />
+                <select className="domain-select" onChange={handleDomainChange} value={formData.emailDomain}>
+                  <option value="">직접 입력</option>
+                  <option value="naver.com">naver.com</option>
+                  <option value="gmail.com">gmail.com</option>
+                  <option value="daum.net">daum.net</option>
+                  <option value="kakao.com">kakao.com</option>
+                </select>
+              </div>
             </div>
+
             <div className="form-group">
               <label>Message</label>
               <textarea 
