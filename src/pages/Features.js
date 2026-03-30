@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import Layout from './Layout';
 import './Features.css';
 
 const Features = () => {
   const [theme, setTheme] = useState('mystic'); // mystic, aurora, vulcan
   const [intensity, setIntensity] = useState(50);
-  const [isHovered, setIsHovered] = useState(null);
 
   const themes = {
     mystic: { primary: '#8b5cf6', secondary: '#ec4899', bg: '#09090b' },
@@ -48,9 +47,7 @@ const Features = () => {
         {/* Bento Grid Showcase */}
         <div className="bento-grid">
           {/* Main Feature: Performance Visualizer */}
-          <div className="bento-item large glass-panel" 
-               onMouseEnter={() => setIsHovered('perf')}
-               onMouseLeave={() => setIsHovered(null)}>
+          <div className="bento-item large glass-panel">
             <div className="bento-content">
               <h3>High-Velocity Rendering</h3>
               <p>수백 개의 동적 노드를 초당 60프레임으로 제어하는 리액트의 압도적 효율성.</p>
