@@ -93,7 +93,7 @@ const Contact = () => {
                   required
                 />
                 {formData.name && (
-                  <button type="button" className="btn-clear" onClick={() => setFormData({...formData, name: ''})}>✕</button>
+                  <button type="button" className="btn-clear" onClick={() => setFormData({...formData, name: ''})}>X</button>
                 )}
               </div>
             </div>
@@ -110,7 +110,7 @@ const Contact = () => {
                     required
                   />
                   {formData.emailId && (
-                    <button type="button" className="btn-clear" onClick={() => setFormData({...formData, emailId: ''})}>✕</button>
+                    <button type="button" className="btn-clear" onClick={() => setFormData({...formData, emailId: ''})}>X</button>
                   )}
                 </div>
                 <span className="at-symbol">@</span>
@@ -128,7 +128,7 @@ const Contact = () => {
                           required
                         />
                         {formData.emailDomain && (
-                          <button type="button" className="btn-clear" onClick={() => setFormData({...formData, emailDomain: ''})}>✕</button>
+                          <button type="button" className="btn-clear" onClick={() => setFormData({...formData, emailDomain: ''})}>X</button>
                         )}
                       </div>
                       <button type="button" className="btn-back" onClick={() => setIsManual(false)}>↩</button>
@@ -171,7 +171,7 @@ const Contact = () => {
                   required
                 ></textarea>
                 {formData.message && (
-                  <button type="button" className="btn-clear" style={{top: '1.5rem', transform: 'none'}} onClick={() => setFormData({...formData, message: ''})}>✕</button>
+                  <button type="button" className="btn-clear" style={{top: '1.5rem', transform: 'none'}} onClick={() => setFormData({...formData, message: ''})}>X</button>
                 )}
               </div>
             </div>

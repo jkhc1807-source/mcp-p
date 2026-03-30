@@ -44,13 +44,13 @@ const About = () => {
         </section>
 
         {/* 1. Core Sections */}
-        {sections.map((section, sIdx) => (
-          <section key={sIdx} className="about-section">
+        {sections.map((section) => (
+          <section key={section.title} className="about-section">
             <span className="subtitle" style={{textAlign: 'center', display: 'block'}}>{section.subtitle}</span>
             <h2 className="section-title">{section.title}</h2>
             <div className="about-grid">
-              {section.items.map((item, iIdx) => (
-                <div key={iIdx} className="info-card glass-panel">
+              {section.items.map((item) => (
+                <div key={item.title} className="info-card glass-panel">
                   <h4>{item.title}</h4>
                   <p>{item.desc}</p>
                 </div>
@@ -65,8 +65,8 @@ const About = () => {
           <h2 className="section-title">Our Milestones</h2>
           <div className="glass-panel opaque" style={{padding: '4rem'}}>
             <div className="milestone-list">
-              {milestones.map((m, i) => (
-                <div key={i} className="milestone-item" style={{display: 'flex', gap: '3rem', marginBottom: '2rem', alignItems: 'center'}}>
+              {milestones.map((m) => (
+                <div key={m.year} className="milestone-item" style={{display: 'flex', gap: '3rem', marginBottom: '2rem', alignItems: 'center'}}>
                   <strong style={{fontSize: '2rem', color: 'var(--primary)', minWidth: '100px'}}>{m.year}</strong>
                   <p style={{fontSize: '1.2rem', color: 'var(--text-main)'}}>{m.event}</p>
                 </div>

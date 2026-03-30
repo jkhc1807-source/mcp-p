@@ -72,7 +72,7 @@ const Layout = ({ children }) => {
 
       {/* 모바일 내비게이션 오버레이 (명시적 닫기 버튼 포함) */}
       <div className={`mobile-nav-overlay ${isMenuOpen ? 'open' : ''}`}>
-        <button className="menu-close-btn" onClick={() => setIsMenuOpen(false)} aria-label="Close Menu">✕</button>
+        <button className="menu-close-btn" onClick={() => setIsMenuOpen(false)} aria-label="Close Menu">X</button>
         <NavLink to="/" className="mobile-nav-item" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
         <NavLink to="/features" className="mobile-nav-item" onClick={() => setIsMenuOpen(false)}>Showcase</NavLink>
         <NavLink to="/about" className="mobile-nav-item" onClick={() => setIsMenuOpen(false)}>About</NavLink>
