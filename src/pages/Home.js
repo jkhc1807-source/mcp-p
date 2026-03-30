@@ -1,22 +1,7 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import Layout from './Layout';
+import { Link } from 'react-router-dom';
 import './Page.css';
-
-const Layout = ({ children }) => (
-  <div className="app-container">
-    <nav className="navbar">
-      <Link to="/" className="nav-logo">REACT DEV</Link>
-      <div className="nav-links">
-        <NavLink to="/" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Home</NavLink>
-        <NavLink to="/about" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>About</NavLink>
-        <NavLink to="/contact" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Contact</NavLink>
-      </div>
-    </nav>
-    <main className="main-content">
-      {children}
-    </main>
-  </div>
-);
 
 function Home() {
   return (
