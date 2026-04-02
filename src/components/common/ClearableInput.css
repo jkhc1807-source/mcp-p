@@ -1,0 +1,70 @@
+/* GEMINI.md 규칙 준수: 파스텔 톤 및 레이아웃 시프트 금지 */
+.clearable-input-wrapper {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.clearable-input-wrapper label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 600;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-container input,
+.input-container textarea {
+  width: 100%;
+  padding: 12px 35px 12px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.input-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.input-container input:focus,
+.input-container textarea:focus {
+  outline: none;
+  border-color: #bbdefb; /* 파스텔 블루 */
+  box-shadow: 0 0 0 4px rgba(187, 222, 251, 0.25);
+}
+
+.btn-clear {
+  position: absolute;
+  right: 12px;
+  background: #f0f0f0;
+  border: none;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+}
+
+.is-textarea .btn-clear {
+  top: 12px; /* 텍스트에리어의 경우 상단에 고정 */
+}
+
+.btn-clear:hover {
+  background: #e0e0e0;
+  color: #555;
+}

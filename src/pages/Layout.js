@@ -54,6 +54,7 @@ const Layout = ({ children }) => {
               <NavLink to="/features" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} role="menuitem">Showcase</NavLink>
               <NavLink to="/about" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} role="menuitem">About</NavLink>
               <NavLink to="/contact" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} role="menuitem">Contact</NavLink>
+              <NavLink to="/weather" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} role="menuitem">Weather</NavLink>
             </div>
             
             <button 
@@ -108,6 +109,7 @@ const Layout = ({ children }) => {
           <NavLink to="/features" className="mobile-nav-item" onClick={() => setIsMenuOpen(false)}>Showcase</NavLink>
           <NavLink to="/about" className="mobile-nav-item" onClick={() => setIsMenuOpen(false)}>About</NavLink>
           <NavLink to="/contact" className="mobile-nav-item" onClick={() => setIsMenuOpen(false)}>Contact</NavLink>
+          <NavLink to="/weather" className="mobile-nav-item" onClick={() => setIsMenuOpen(false)}>Weather</NavLink>
         </div>
       </div>
 
