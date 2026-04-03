@@ -162,9 +162,14 @@ const Weather = () => {
               const x = padding + i * spacing - 30;
               const barH = ((d.t - minT + 5) / (range + 10)) * 220;
               const y = 340 - barH;
+              
+              // 탭에 따른 테마 색상 결정
+              const themeColor = activeTab === 'hourly' ? '#3b82f6' : activeTab === 'weekly' ? '#10b981' : '#8b5cf6';
+              const themeLight = activeTab === 'hourly' ? '#93c5fd' : activeTab === 'weekly' ? '#6ee7b7' : '#c4b5fd';
+
               return (
                 <g key={i} className="bar-group">
-                  <defs><linearGradient id={`barGrad-${i}`} x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style={{stopColor: d.t > 20 ? '#ec4899' : '#3b82f6', stopOpacity: 0.9}} /><stop offset="100%" style={{stopColor: d.t > 20 ? '#fbcfe8' : '#bfdbfe', stopOpacity: 0.3}} /></linearGradient></defs>
+                  <defs><linearGradient id={`barGrad-${i}`} x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style={{stopColor: themeColor, stopOpacity: 0.9}} /><stop offset="100%" style={{stopColor: themeLight, stopOpacity: 0.3}} /></linearGradient></defs>
                   <rect x={x} y={y} width="60" height={barH} rx="12" fill={`url(#barGrad-${i})`} className="animate-bar" />
                   <text x={x + 30} y={y - 55} textAnchor="middle" fontSize="28">{d.icon}</text>
                   <text x={x + 30} y={y - 20} textAnchor="middle" fontSize="24" fontWeight="900" fill="var(--text-main)">{d.t}°</text>
@@ -175,16 +180,24 @@ const Weather = () => {
           </svg>
         </div>
         <div className="mobile-only-list bento-list-v3">
-          {data.map((d, i) => (
-            <div key={i} className="bento-list-item">
-              <span className="list-label">{d.label}</span>
-              <span className="list-icon">{d.icon}</span>
-              <span className="list-temp">{d.t}°</span>
-              <div className="list-bar-bg">
-                <div className="list-bar-fill" style={{ width: `${((d.t - minT + 5) / (range + 10)) * 100}%`, background: d.t > 20 ? 'linear-gradient(90deg, #fbbf24, #ec4899)' : 'linear-gradient(90deg, #bfdbfe, #3b82f6)' }}></div>
+          {data.map((d, i) => {
+            const themeGradient = activeTab === 'hourly' 
+              ? 'linear-gradient(90deg, #93c5fd, #3b82f6)' 
+              : activeTab === 'weekly' 
+                ? 'linear-gradient(90deg, #6ee7b7, #10b981)' 
+                : 'linear-gradient(90deg, #c4b5fd, #8b5cf6)';
+            
+            return (
+              <div key={i} className="bento-list-item">
+                <span className="list-label">{d.label}</span>
+                <span className="list-icon">{d.icon}</span>
+                <span className="list-temp">{d.t}°</span>
+                <div className="list-bar-bg">
+                  <div className="list-bar-fill" style={{ width: `${((d.t - minT + 5) / (range + 10)) * 100}%`, background: themeGradient }}></div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
@@ -253,7 +266,7 @@ const Weather = () => {
           <div className="chart-header-v3">
             <h3 className="chart-label-v3">날씨 트렌드</h3>
             <div className="chart-tabs-v3">
-              <div className="tab-indicator-v3" style={{ transform: `translateX(${activeTab === 'hourly' ? '0' : activeTab === 'weekly' ? '100%' : '200%'})`, backgroundColor: activeTab === 'hourly' ? '#3b82f6' : activeTab === 'weekly' ? '#fbbf24' : '#ec4899' }}></div>
+              <div className="tab-indicator-v3" style={{ transform: `translateX(${activeTab === 'hourly' ? '0' : activeTab === 'weekly' ? '100%' : '200%'})`, backgroundColor: activeTab === 'hourly' ? '#3b82f6' : activeTab === 'weekly' ? '#10b981' : '#8b5cf6' }}></div>
               {['hourly', 'weekly', 'monthly'].map(t => (<button key={t} className={`tab-btn-v3 ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>{t === 'hourly' ? '시간별' : t === 'weekly' ? '주간' : '월간'}</button>))}
             </div>
           </div>
