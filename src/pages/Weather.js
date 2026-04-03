@@ -48,11 +48,9 @@ const Weather = () => {
 
     if (Math.abs(diff) > threshold) {
       if (diff > 0) {
-        // Swipe left -> Next (Loop)
         const nextIdx = (currIdx + 1) % tabs.length;
         setActiveTab(tabs[nextIdx]);
       } else {
-        // Swipe right -> Previous (Loop)
         const prevIdx = (currIdx - 1 + tabs.length) % tabs.length;
         setActiveTab(tabs[prevIdx]);
       }
@@ -78,11 +76,44 @@ const Weather = () => {
           wind: curr.wind.speed,
           description: curr.weather[0].description
         });
-        setHourlyData(fore.list.slice(0, 9).map(item => ({
-          label: item.dt_txt.split(' ')[1].substring(0, 5),
-          t: Math.round(item.main.temp),
-          icon: getWeatherEmoji(item.weather[0].main)
-        })));
+
+        // 3시간 데이터를 2시간 단위로 가공 (보간법 적용)
+        const rawList = fore.list.slice(0, 12);
+        const processedHourly = [];
+        const startTime = new Date(rawList[0].dt * 1000);
+        
+        for (let i = 0; i < 8; i++) {
+          const targetTime = new Date(startTime.getTime() + i * 2 * 60 * 60 * 1000);
+          const targetTs = targetTime.getTime() / 1000;
+          
+          // 가장 가까운 두 원본 데이터 찾기
+          let left = rawList[0], right = rawList[0];
+          for (let j = 0; j < rawList.length - 1; j++) {
+            if (rawList[j].dt <= targetTs && rawList[j+1].dt >= targetTs) {
+              left = rawList[j];
+              right = rawList[j+1];
+              break;
+            }
+          }
+          
+          // 온도 선형 보간
+          let interpTemp;
+          let ratio = 0;
+          if (left.dt === right.dt) {
+            interpTemp = left.main.temp;
+          } else {
+            ratio = (targetTs - left.dt) / (right.dt - left.dt);
+            interpTemp = left.main.temp + (right.main.temp - left.main.temp) * ratio;
+          }
+
+          processedHourly.push({
+            label: targetTime.getHours().toString().padStart(2, '0') + ':00',
+            t: Math.round(interpTemp),
+            icon: ratio > 0.5 ? getWeatherEmoji(right.weather[0].main) : getWeatherEmoji(left.weather[0].main)
+          });
+        }
+        setHourlyData(processedHourly);
+
         const weekly = [];
         const days = ['일', '월', '화', '수', '목', '금', '토'];
         for (let i = 0; i < fore.list.length; i += 8) {
@@ -94,16 +125,16 @@ const Weather = () => {
           });
         }
         setWeeklyData(weekly);
+
         const baseT = Math.round(curr.main.temp);
-        const months = [
+        setMonthlyData([
           { label: '1월', t: baseT - 15, icon: '❄️' }, { label: '2월', t: baseT - 12, icon: '❄️' },
           { label: '3월', t: baseT - 5, icon: '🌱' }, { label: '4월', t: baseT, icon: '🌸' },
           { label: '5월', t: baseT + 5, icon: '🌿' }, { label: '6월', t: baseT + 10, icon: '☀️' },
           { label: '7월', t: baseT + 15, icon: '🏖️' }, { label: '8월', t: baseT + 18, icon: '☀️' },
           { label: '9월', t: baseT + 8, icon: '🍂' }, { label: '10월', t: baseT + 2, icon: '🍁' },
           { label: '11월', t: baseT - 6, icon: '🌬️' }, { label: '12월', t: baseT - 12, icon: '❄️' }
-        ];
-        setMonthlyData(months);
+        ]);
       }
     } catch (e) { console.error(e); } finally { setIsLoading(false); }
   }, [WEATHER_KEY]);
@@ -154,6 +185,27 @@ const Weather = () => {
     const maxT = Math.max(...data.map(d => d.t), 30), minT = Math.min(...data.map(d => d.t), 0);
     const range = maxT - minT || 10;
 
+    const now = new Date();
+    let closestIdx = -1;
+    
+    if (activeTab === 'hourly') {
+      const currentHour = now.getHours();
+      let minDiff = Infinity;
+      data.forEach((d, idx) => {
+        const forecastHour = parseInt(d.label.split(':')[0]);
+        let diff = Math.abs(forecastHour - currentHour);
+        if (diff > 12) diff = 24 - diff;
+        if (diff < minDiff) { minDiff = diff; closestIdx = idx; }
+      });
+    } else if (activeTab === 'weekly') {
+      const days = ['일', '월', '화', '수', '목', '금', '토'];
+      const today = days[now.getDay()];
+      closestIdx = data.findIndex(d => d.label === today);
+    } else if (activeTab === 'monthly') {
+      const currentMonth = (now.getMonth() + 1) + '월';
+      closestIdx = data.findIndex(d => d.label === currentMonth);
+    }
+
     return (
       <div className="weather-trend-wrapper">
         <div className="pc-only-chart">
@@ -162,18 +214,20 @@ const Weather = () => {
               const x = padding + i * spacing - 30;
               const barH = ((d.t - minT + 5) / (range + 10)) * 220;
               const y = 340 - barH;
-              
-              // 탭에 따른 테마 색상 결정
+              const isCurrent = i === closestIdx;
               const themeColor = activeTab === 'hourly' ? '#3b82f6' : activeTab === 'weekly' ? '#10b981' : '#8b5cf6';
               const themeLight = activeTab === 'hourly' ? '#93c5fd' : activeTab === 'weekly' ? '#6ee7b7' : '#c4b5fd';
 
+              const highlightLabel = activeTab === 'hourly' ? '지금' : activeTab === 'weekly' ? '오늘' : '이번 달';
+
               return (
-                <g key={i} className="bar-group">
+                <g key={i} className={`bar-group ${isCurrent ? 'is-current' : ''}`}>
                   <defs><linearGradient id={`barGrad-${i}`} x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style={{stopColor: themeColor, stopOpacity: 0.9}} /><stop offset="100%" style={{stopColor: themeLight, stopOpacity: 0.3}} /></linearGradient></defs>
                   <rect x={x} y={y} width="60" height={barH} rx="12" fill={`url(#barGrad-${i})`} className="animate-bar" />
+                  {isCurrent && <text x={x + 30} y={y - 85} textAnchor="middle" fontSize="16" fontWeight="900" fill={themeColor} className="now-label">{highlightLabel}</text>}
                   <text x={x + 30} y={y - 55} textAnchor="middle" fontSize="28">{d.icon}</text>
                   <text x={x + 30} y={y - 20} textAnchor="middle" fontSize="24" fontWeight="900" fill="var(--text-main)">{d.t}°</text>
-                  <text x={x + 30} y={400} textAnchor="middle" fontSize="18" fill="var(--text-muted)" fontWeight="800">{d.label}</text>
+                  <text x={x + 30} y={400} textAnchor="middle" fontSize="18" fill="var(--text-muted)" fontWeight="800">{isCurrent ? highlightLabel : d.label}</text>
                 </g>
               );
             })}
@@ -181,15 +235,13 @@ const Weather = () => {
         </div>
         <div className="mobile-only-list bento-list-v3">
           {data.map((d, i) => {
-            const themeGradient = activeTab === 'hourly' 
-              ? 'linear-gradient(90deg, #93c5fd, #3b82f6)' 
-              : activeTab === 'weekly' 
-                ? 'linear-gradient(90deg, #6ee7b7, #10b981)' 
-                : 'linear-gradient(90deg, #c4b5fd, #8b5cf6)';
+            const isCurrent = i === closestIdx;
+            const themeGradient = activeTab === 'hourly' ? 'linear-gradient(90deg, #93c5fd, #3b82f6)' : activeTab === 'weekly' ? 'linear-gradient(90deg, #6ee7b7, #10b981)' : 'linear-gradient(90deg, #c4b5fd, #8b5cf6)';
+            const highlightLabel = activeTab === 'hourly' ? '지금' : activeTab === 'weekly' ? '오늘' : '이번 달';
             
             return (
-              <div key={i} className="bento-list-item">
-                <span className="list-label">{d.label}</span>
+              <div key={i} className={`bento-list-item ${isCurrent ? 'is-current' : ''}`}>
+                <span className="list-label">{isCurrent ? highlightLabel : d.label}</span>
                 <span className="list-icon">{d.icon}</span>
                 <span className="list-temp">{d.t}°</span>
                 <div className="list-bar-bg">
@@ -270,7 +322,7 @@ const Weather = () => {
               {['hourly', 'weekly', 'monthly'].map(t => (<button key={t} className={`tab-btn-v3 ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>{t === 'hourly' ? '시간별' : t === 'weekly' ? '주간' : '월간'}</button>))}
             </div>
           </div>
-          <div
+          <div 
             className="trend-content-area"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -283,132 +335,6 @@ const Weather = () => {
           </div>
         </section>
       </div>
-
-      <style>{`
-        .weather-premium-container { width: 100%; min-height: 100vh; padding: 100px 2rem 80px; display: flex; flex-direction: column; align-items: center; background: #f8fafc; color: #1e293b; font-family: 'Pretendard', 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
-        .weather-bg-gradient { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(236,72,153,0.06) 0%, transparent 50%); z-index:-1; }
-
-        /* --- Search Section --- */
-        .search-section-v3 { width: 100%; max-width: 800px; margin-bottom: 4rem; position: relative; z-index: 1000; padding: 0 10px; }
-        .search-capsule { display: flex; align-items: center; padding: 0.6rem 1rem; background: white; border-radius: 100px; box-shadow: 0 20px 40px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); width: 100%; box-sizing: border-box; }
-        .search-capsule:focus-within { transform: translateY(-4px); box-shadow: 0 30px 60px rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.2); }
-        .s-icon-v3 { margin-left: 1rem; color: #cbd5e1; font-size: 1.1rem; flex-shrink: 0; }
-        .s-input-v3 { flex: 1; border: none; background: none; padding: 0.8rem 1.2rem; font-size: 1.15rem; font-weight: 700; outline: none; color: #1e293b; width: 100%; min-width: 0; }
-        .s-input-v3::placeholder { color: #94a3b8; font-weight: 500; }
-        .s-clear-v3 { border: none; background: #f1f5f9; color: #64748b; width: 26px; height: 26px; border-radius: 50%; font-size: 11px; cursor: pointer; margin-right: 0.6rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s; }
-        .s-clear-v3:hover { background: #e2e8f0; color: #1e293b; }
-        .s-geo-v3 { border: none; background: none; font-size: 1.4rem; cursor: pointer; padding: 0.5rem; margin-right: 0.5rem; transition: 0.3s; flex-shrink: 0; opacity: 0.7; }
-        .s-geo-v3:hover { opacity: 1; transform: scale(1.1); }
-        .s-submit-v3 { background: #3b82f6; color: white; border: none; padding: 0.9rem 2rem; border-radius: 100px; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 1rem; white-space: nowrap; box-shadow: 0 10px 20px rgba(59,130,246,0.2); flex-shrink: 0; }
-        .s-submit-v3:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 15px 30px rgba(59,130,246,0.3); }
-
-        .s-dropdown-v3 { position: absolute; top: 120%; left: 10px; right: 10px; background: white; border-radius: 32px; box-shadow: 0 40px 80px rgba(0,0,0,0.15); overflow: hidden; border: 1px solid rgba(0,0,0,0.04); animation: dropSlide 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        @keyframes dropSlide { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .s-drop-item-v3 { padding: 1.4rem 2.2rem; border-bottom: 1px solid #f8fafc; cursor: pointer; display: flex; flex-direction: column; transition: 0.2s; }
-        .s-drop-item-v3:hover { background: #f1f5f9; padding-left: 2.5rem; }
-        .s-drop-item-v3 strong { font-size: 1.1rem; color: #1e293b; margin-bottom: 0.2rem; }
-        .s-drop-item-v3 span { font-size: 0.9rem; color: #64748b; font-weight: 500; }
-
-        /* --- Hero Grid --- */
-        .weather-main-grid { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1.6fr 1fr; gap: 3rem; margin-bottom: 3.5rem; }
-        .weather-card-hero { background: white; border-radius: 56px; padding: 4.5rem; box-shadow: 0 30px 60px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(0,0,0,0.01); }
-        .hero-header-v3 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
-        .hero-loc-badge { display: flex; align-items: center; gap: 10px; padding: 0.8rem 1.5rem; background: #f1f5f9; border-radius: 100px; font-weight: 800; font-size: 1.1rem; color: #475569; }
-        .dot-v3 { width: 10px; height: 10px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.4); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        .hero-date-v3 { font-weight: 600; color: #94a3b8; font-size: 1.1rem; }
-
-        .temp-val-v3 { font-size: 10rem; font-weight: 900; letter-spacing: -6px; line-height: 0.85; display: flex; color: #0f172a; }
-        .unit-v3 { font-size: 5rem; color: #3b82f6; margin-left: 0.5rem; font-weight: 300; }
-        .desc-v3 { font-size: 3rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem; display: block; }
-        .minmax-v3 { font-size: 1.1rem; font-weight: 600; color: #64748b; background: #f8fafc; padding: 0.5rem 1.2rem; border-radius: 12px; display: inline-block; }
-        .hero-visual-v3 { font-size: 11rem; filter: drop-shadow(0 30px 40px rgba(0,0,0,0.1)); }
-
-        .weather-side-stats { display: flex; flex-direction: column; gap: 1.8rem; }
-        .stat-card-v3 { background: white; border-radius: 40px; padding: 2.2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.02); flex: 1; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border: 1px solid rgba(0,0,0,0.01); }
-        .stat-card-v3:hover { transform: translateY(-5px); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
-        .stat-title-v3 { font-size: 0.95rem; font-weight: 700; color: #94a3b8; display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .stat-val-v3 { font-size: 2.4rem; font-weight: 900; color: #0f172a; margin-bottom: 0.8rem; letter-spacing: -1px; }
-        .stat-val-v3 small { font-size: 1.1rem; font-weight: 600; color: #94a3b8; margin-left: 0.3rem; }
-        .stat-msg-v3 { font-size: 1rem; font-weight: 600; color: #64748b; }
-
-        .progress-v3 { width: 100%; height: 10px; background: #f1f5f9; border-radius: 10px; overflow: hidden; margin-top: 1rem; }
-        .bar-v3 { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 10px; transition: width 1s ease-out; }
-
-        .weather-chart-section { width: 100%; max-width: 1100px; background: white; border-radius: 56px; padding: 4.5rem; box-shadow: 0 30px 60px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.01); }
-        .chart-header-v3 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem; }
-        .chart-label-v3 { font-size: 2rem; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; margin: 0; }
-        .chart-tabs-v3 { display: flex; position: relative; background: #f1f5f9; padding: 0.5rem; border-radius: 100px; width: 100%; max-width: 420px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        .tab-indicator-v3 { position: absolute; top: 0.5rem; left: 0.5rem; bottom: 0.5rem; width: calc(33.333% - 0.34rem); border-radius: 100px; transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s ease; z-index: 1; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .tab-btn-v3 { position: relative; flex: 1; border: none; background: none; padding: 1rem 0.5rem; border-radius: 100px; color: #64748b; font-weight: 800; cursor: pointer; z-index: 2; font-size: 1.05rem; transition: 0.3s; }
-        .tab-btn-v3.active { color: white; }
-        .tab-btn-v3:not(.active):hover { color: #1e293b; }
-
-        .trend-content-area { width: 100%; min-height: 300px; }
-        .pc-only-chart { display: block !important; width: 100%; }
-        .mobile-only-list { display: none !important; }
-        .premium-svg { width: 100%; height: auto; overflow: visible; }
-
-        .bento-list-v3 { width: 100%; display: flex; flex-direction: column; gap: 1.2rem; }
-        .bento-list-item { display: grid; grid-template-columns: 70px 50px 70px 1fr; align-items: center; padding: 1.8rem 2rem; background: #f8fafc; border-radius: 28px; border: 1px solid rgba(0,0,0,0.01); transition: 0.2s; }
-        .bento-list-item:hover { transform: scale(1.02); background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
-        .list-label { font-weight: 800; color: #64748b; font-size: 1.1rem; }
-        .list-icon { font-size: 1.6rem; text-align: center; }
-        .list-temp { font-weight: 900; color: #0f172a; font-size: 1.3rem; text-align: right; margin-right: 1.5rem; }
-        .list-bar-bg { height: 12px; background: #e2e8f0; border-radius: 10px; overflow: hidden; position: relative; }
-        .list-bar-fill { height: 100%; border-radius: 10px; transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-        @media (max-width: 1050px) {
-          .weather-main-grid { grid-template-columns: 1fr; gap: 2rem; }
-          .weather-card-hero { padding: 3.5rem; }
-        }
-
-        @media (max-width: 950px) {
-          .weather-side-stats { flex-direction: row; flex-wrap: wrap; }
-          .stat-card-v3 { min-width: 200px; }
-          .weather-premium-container { padding: 110px 2rem 60px; }
-        }
-
-        @media (max-width: 768px) {
-          .chart-header-v3 { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-          .chart-label-v3 { font-size: 1.8rem; }
-          .chart-tabs-v3 { max-width: 100%; }
-        }
-
-        @media (max-width: 650px) {
-          .pc-only-chart { display: none !important; }
-          .mobile-only-list { display: flex !important; }
-          .weather-premium-container { padding: 90px 1.2rem 40px; }
-          .search-section-v3 { margin-bottom: 2.5rem; }
-
-          .weather-card-hero { padding: 2.5rem 1.8rem; border-radius: 40px; }
-          .hero-header-v3 { margin-bottom: 2.5rem; }
-          .hero-loc-badge { font-size: 1rem; padding: 0.6rem 1.2rem; }
-
-          .temp-val-v3 { font-size: 7rem; letter-spacing: -4px; justify-content: center; }
-          .unit-v3 { font-size: 3rem; margin-top: 1rem; }
-          .desc-v3 { font-size: 2.2rem; text-align: center; }
-          .minmax-v3 { display: block; text-align: center; margin: 0 auto; width: fit-content; }
-          .hero-visual-v3 { font-size: 8rem; text-align: center; margin-top: 1rem; }
-
-          .weather-side-stats { flex-direction: column; gap: 1.2rem; }
-          .stat-card-v3 { padding: 1.8rem; border-radius: 32px; }
-          .stat-val-v3 { font-size: 2.1rem; }
-
-          .weather-chart-section { padding: 2.5rem 1.5rem; border-radius: 40px; }
-          .chart-header-v3 { margin-bottom: 2.5rem; }
-
-          .bento-list-item { grid-template-columns: 60px 45px 60px 1fr; padding: 1.4rem 1.2rem; border-radius: 20px; gap: 8px; }
-          .list-label { font-size: 1rem; }
-          .list-icon { font-size: 1.4rem; }
-          .list-temp { font-size: 1.1rem; margin-right: 0.8rem; }
-
-          .s-submit-v3 { font-size: 0; padding: 0.8rem; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; }
-          .s-submit-v3::before { content: '🔍'; font-size: 1.2rem; }
-          .s-input-v3 { padding: 0.8rem 0.6rem; font-size: 1.05rem; }
-          .s-icon-v3 { margin-left: 0.5rem; }
-        }
-      `}</style>
     </Layout>
   );
 };
