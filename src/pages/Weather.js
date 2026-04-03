@@ -257,7 +257,7 @@ const Weather = () => {
               {['hourly', 'weekly', 'monthly'].map(t => (<button key={t} className={`tab-btn-v3 ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>{t === 'hourly' ? '시간별' : t === 'weekly' ? '주간' : '월간'}</button>))}
             </div>
           </div>
-          <div 
+          <div
             className="trend-content-area"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -274,7 +274,7 @@ const Weather = () => {
       <style>{`
         .weather-premium-container { width: 100%; min-height: 100vh; padding: 100px 2rem 80px; display: flex; flex-direction: column; align-items: center; background: #f8fafc; color: #1e293b; font-family: 'Pretendard', 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
         .weather-bg-gradient { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(236,72,153,0.06) 0%, transparent 50%); z-index:-1; }
-        
+
         /* --- Search Section --- */
         .search-section-v3 { width: 100%; max-width: 800px; margin-bottom: 4rem; position: relative; z-index: 1000; padding: 0 10px; }
         .search-capsule { display: flex; align-items: center; padding: 0.6rem 1rem; background: white; border-radius: 100px; box-shadow: 0 20px 40px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); width: 100%; box-sizing: border-box; }
@@ -295,7 +295,7 @@ const Weather = () => {
         .s-drop-item-v3:hover { background: #f1f5f9; padding-left: 2.5rem; }
         .s-drop-item-v3 strong { font-size: 1.1rem; color: #1e293b; margin-bottom: 0.2rem; }
         .s-drop-item-v3 span { font-size: 0.9rem; color: #64748b; font-weight: 500; }
-        
+
         /* --- Hero Grid --- */
         .weather-main-grid { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1.6fr 1fr; gap: 3rem; margin-bottom: 3.5rem; }
         .weather-card-hero { background: white; border-radius: 56px; padding: 4.5rem; box-shadow: 0 30px 60px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(0,0,0,0.01); }
@@ -310,7 +310,7 @@ const Weather = () => {
         .desc-v3 { font-size: 3rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem; display: block; }
         .minmax-v3 { font-size: 1.1rem; font-weight: 600; color: #64748b; background: #f8fafc; padding: 0.5rem 1.2rem; border-radius: 12px; display: inline-block; }
         .hero-visual-v3 { font-size: 11rem; filter: drop-shadow(0 30px 40px rgba(0,0,0,0.1)); }
-        
+
         .weather-side-stats { display: flex; flex-direction: column; gap: 1.8rem; }
         .stat-card-v3 { background: white; border-radius: 40px; padding: 2.2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.02); flex: 1; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border: 1px solid rgba(0,0,0,0.01); }
         .stat-card-v3:hover { transform: translateY(-5px); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
@@ -318,7 +318,7 @@ const Weather = () => {
         .stat-val-v3 { font-size: 2.4rem; font-weight: 900; color: #0f172a; margin-bottom: 0.8rem; letter-spacing: -1px; }
         .stat-val-v3 small { font-size: 1.1rem; font-weight: 600; color: #94a3b8; margin-left: 0.3rem; }
         .stat-msg-v3 { font-size: 1rem; font-weight: 600; color: #64748b; }
-        
+
         .progress-v3 { width: 100%; height: 10px; background: #f1f5f9; border-radius: 10px; overflow: hidden; margin-top: 1rem; }
         .bar-v3 { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 10px; transition: width 1s ease-out; }
 
@@ -367,29 +367,29 @@ const Weather = () => {
           .mobile-only-list { display: flex !important; }
           .weather-premium-container { padding: 90px 1.2rem 40px; }
           .search-section-v3 { margin-bottom: 2.5rem; }
-          
+
           .weather-card-hero { padding: 2.5rem 1.8rem; border-radius: 40px; }
           .hero-header-v3 { margin-bottom: 2.5rem; }
           .hero-loc-badge { font-size: 1rem; padding: 0.6rem 1.2rem; }
-          
+
           .temp-val-v3 { font-size: 7rem; letter-spacing: -4px; justify-content: center; }
           .unit-v3 { font-size: 3rem; margin-top: 1rem; }
           .desc-v3 { font-size: 2.2rem; text-align: center; }
           .minmax-v3 { display: block; text-align: center; margin: 0 auto; width: fit-content; }
           .hero-visual-v3 { font-size: 8rem; text-align: center; margin-top: 1rem; }
-          
+
           .weather-side-stats { flex-direction: column; gap: 1.2rem; }
           .stat-card-v3 { padding: 1.8rem; border-radius: 32px; }
           .stat-val-v3 { font-size: 2.1rem; }
-          
+
           .weather-chart-section { padding: 2.5rem 1.5rem; border-radius: 40px; }
           .chart-header-v3 { margin-bottom: 2.5rem; }
-          
+
           .bento-list-item { grid-template-columns: 60px 45px 60px 1fr; padding: 1.4rem 1.2rem; border-radius: 20px; gap: 8px; }
           .list-label { font-size: 1rem; }
           .list-icon { font-size: 1.4rem; }
           .list-temp { font-size: 1.1rem; margin-right: 0.8rem; }
-          
+
           .s-submit-v3 { font-size: 0; padding: 0.8rem; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; }
           .s-submit-v3::before { content: '🔍'; font-size: 1.2rem; }
           .s-input-v3 { padding: 0.8rem 0.6rem; font-size: 1.05rem; }
