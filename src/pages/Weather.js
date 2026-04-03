@@ -9,6 +9,8 @@ const Weather = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('hourly');
   const searchRef = useRef(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   const [weather, setWeather] = useState({
     temp: 14, condition: 'Clear', location: '서울', humidity: 45, wind: 3.0, description: '맑음'
@@ -34,6 +36,29 @@ const Weather = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchMove = (e) => { touchEndX.current = e.touches[0].clientX; };
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+    const tabs = ['hourly', 'weekly', 'monthly'];
+    const currIdx = tabs.indexOf(activeTab);
+    const threshold = 50;
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swipe left -> Next (Loop)
+        const nextIdx = (currIdx + 1) % tabs.length;
+        setActiveTab(tabs[nextIdx]);
+      } else {
+        // Swipe right -> Previous (Loop)
+        const prevIdx = (currIdx - 1 + tabs.length) % tabs.length;
+        setActiveTab(tabs[prevIdx]);
+      }
+    }
+    touchStartX.current = 0; touchEndX.current = 0;
+  };
 
   const fetchRealWeather = useCallback(async (lat, lon, cityName) => {
     setIsLoading(true);
@@ -232,7 +257,13 @@ const Weather = () => {
               {['hourly', 'weekly', 'monthly'].map(t => (<button key={t} className={`tab-btn-v3 ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>{t === 'hourly' ? '시간별' : t === 'weekly' ? '주간' : '월간'}</button>))}
             </div>
           </div>
-          <div className="trend-content-area">
+          <div 
+            className="trend-content-area"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{ touchAction: 'pan-y' }}
+          >
             {activeTab === 'hourly' && renderTrendChart(hourlyData)}
             {activeTab === 'weekly' && renderTrendChart(weeklyData)}
             {activeTab === 'monthly' && renderTrendChart(monthlyData)}
